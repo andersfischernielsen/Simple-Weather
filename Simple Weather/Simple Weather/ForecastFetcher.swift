@@ -9,20 +9,21 @@
 import UIKit
 
 class ForecastFetcher: NSObject {
-    var data : NSArray = []
-    var weatherDescription = String()
-    var hourlyWeatherData: [HourWeatherData] = []
+    var data : NSArray? = []
+    var weatherDescription: String? = String()
+    var hourlyWeatherData: [HourWeatherData]? = []
     
     override init() {
         super.init()
-        let json = getJSON("file:///Users/iMac/Desktop/SimpleWeather/forecast.json")
-        let asDictionary = parseJSON(json)
-        weatherDescription = getWeatherDescription(asDictionary)
-        hourlyWeatherData = getHourlyWeatherData(asDictionary)
+        if let json = getJSON("file:///Users/iMac/Desktop/SimpleWeather/forecast.json") {
+            let asDictionary = parseJSON(json)
+            weatherDescription = getWeatherDescription(asDictionary)
+            hourlyWeatherData = getHourlyWeatherData(asDictionary)
+        }
     }
     
-    func getJSON(urlToRequest: String) -> NSData {
-        return NSData(contentsOfURL: NSURL(string: urlToRequest)!)!
+    func getJSON(urlToRequest: String) -> NSData? {
+        return NSData(contentsOfURL: NSURL(string: urlToRequest)!)
     }
     
     func getWeatherDescription(data: Dictionary<String, AnyObject>) -> String {

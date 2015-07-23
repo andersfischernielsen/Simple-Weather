@@ -39,16 +39,21 @@ class ViewController: UIViewController {
         
         let fetcher = ForecastFetcher()
         
-        forecastSummary.text = fetcher.weatherDescription
-        let data = fetcher.hourlyWeatherData
-        
-        var i = 0
-        for forecast in data {
-            times[i].text = getPrintDate(data[i].time)
-            images[i].text = forecast.icon
-            temps[i].text = "\(forecast.temperature)°"
-            i += 1
+        if let description = fetcher.weatherDescription {
+            forecastSummary.text = fetcher.weatherDescription
         }
+        
+        if let data = fetcher.hourlyWeatherData {
+            var i = 0
+            for forecast in data {
+                times[i].text = getPrintDate(data[i].time)
+                images[i].text = forecast.icon
+                temps[i].text = "\(forecast.temperature)°"
+                i += 1
+            }
+        }
+        
+        
         
         // Do any additional setup after loading the view, typically from a nib.
     }
