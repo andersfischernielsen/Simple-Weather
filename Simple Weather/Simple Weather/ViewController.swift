@@ -17,11 +17,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var fourthTimeLabel: UILabel!
     @IBOutlet weak var fifthTimeLabel: UILabel!
     
-    @IBOutlet weak var firstImageLabel: UILabel!
-    @IBOutlet weak var secondImageLabel: UILabel!
-    @IBOutlet weak var thirdImageLabel: UILabel!
-    @IBOutlet weak var fourthImageLabel: UILabel!
-    @IBOutlet weak var fifthImageLabel: UILabel!
+    @IBOutlet weak var firstImageLabel: UIImageView!
+    @IBOutlet weak var secondImageLabel: UIImageView!
+    @IBOutlet weak var thirdImageLabel: UIImageView!
+    @IBOutlet weak var fourthImageLabel: UIImageView!
+    @IBOutlet weak var fifthImageLabel: UIImageView!
     
     @IBOutlet weak var firstTempLabel: UILabel!
     @IBOutlet weak var secondTempLabel: UILabel!
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
 
         let times = [firstTimeLabel, secondTimeLabel, thirdTimeLabel, fourthTimeLabel, fifthTimeLabel]
-        let images = [firstImageLabel, secondImageLabel, thirdImageLabel, fourthImageLabel, fifthImageLabel]
+        var images = [firstImageLabel, secondImageLabel, thirdImageLabel, fourthImageLabel, fifthImageLabel]
         let temps = [firstTempLabel, secondTempLabel, thirdTempLabel, fourthTempLabel, fifthTempLabel]
         
         super.viewDidLoad()
@@ -47,8 +47,8 @@ class ViewController: UIViewController {
             var i = 0
             for forecast in data {
                 times[i].text = getPrintDate(data[i].time)
-                images[i].text = forecast.icon
-                temps[i].text = "\(forecast.temperature)°"
+                images[i].image = UIImage(named: forecast.icon)
+                temps[i].text = String(format: "%.1f", forecast.temperature) + " °C"
                 i += 1
             }
         }
@@ -66,7 +66,13 @@ class ViewController: UIViewController {
         let hour = comp.hour
         let minute = comp.minute
         
-        return "\(hour):\(minute)"
+        if minute == 0 {
+            return "\(hour):\(minute)\(minute)"
+        }
+        else {
+            return "\(hour):\(minute)"
+        }
+        
     }
     
     override func viewWillAppear(animated: Bool) {

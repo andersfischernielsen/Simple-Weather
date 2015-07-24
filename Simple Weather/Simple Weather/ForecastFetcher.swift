@@ -15,7 +15,9 @@ class ForecastFetcher: NSObject {
     
     override init() {
         super.init()
-        if let json = getJSON("file:///Users/iMac/Desktop/Simple-Weather/forecast.json") {
+        
+        let timestamp = Int(NSDate().timeIntervalSince1970) - 10800
+        if let json = getJSON("https://api.forecast.io/forecast/c8b21df3eeb39178cc1d49d6f760f251/55.462597,10.219524,\(timestamp)?units=si") {
             let asDictionary = parseJSON(json)
             weatherDescription = getWeatherDescription(asDictionary)
             hourlyWeatherData = getHourlyWeatherData(asDictionary)
@@ -26,9 +28,17 @@ class ForecastFetcher: NSObject {
         return NSData(contentsOfURL: NSURL(string: urlToRequest)!)
     }
     
+    func parseJSON(inputData: NSData) -> Dictionary<String, AnyObject> {
+        var error: NSError?
+        let weatherData = NSJSONSerialization.JSONObjectWithData(inputData, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
+        
+        return weatherData as! Dictionary<String, AnyObject>
+    }
+    
     func getWeatherDescription(data: Dictionary<String, AnyObject>) -> String {
         let hourly = data["hourly"] as! Dictionary<String, AnyObject>
-        return hourly["summary"] as! String
+        let description = hourly["summary"] as! String
+        return "\(description)"
     }
     
     func getHourlyWeatherData(data: Dictionary<String, AnyObject>) -> [HourWeatherData] {
@@ -49,7 +59,7 @@ class ForecastFetcher: NSObject {
         let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
         let interval = time.timeIntervalSinceNow
         
-        if interval < 7200 && interval > 0 || interval > -7200 && interval < 0 {
+        if interval <= 7200 && interval >= 0 || interval >= -7200 && interval <= 0 {
             let icon = forecast["icon"] as! String
             let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
             let temperature = forecast["temperature"] as! Double
@@ -60,25 +70,6 @@ class ForecastFetcher: NSObject {
         else {
             return nil
         }
-    }
-    
-    func parseJSON(inputData: NSData) -> Dictionary<String, AnyObject> {
-        var error: NSError?
-        let weatherData = NSJSONSerialization.JSONObjectWithData(inputData, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
-        
-        return weatherData as! Dictionary<String, AnyObject>
-    }
-    
-    
-    
-    func convertToNSDate(toConvertAndCompare: Int) -> NSDate {
-        var timestamp = NSTimeInterval(toConvertAndCompare)
-        
-        return NSDate(timeIntervalSince1970:timestamp)
-    }
-    
-    func dateIsIn5HourInterval(toCompare: NSDate) -> Bool {
-        return toCompare.timeIntervalSinceNow < 7200
     }
 }
 
