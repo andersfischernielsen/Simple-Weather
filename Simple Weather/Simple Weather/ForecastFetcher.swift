@@ -15,7 +15,7 @@ class ForecastFetcher: NSObject {
     
     override init() {
         super.init()
-        if let json = getJSON("file:///Users/iMac/Desktop/SimpleWeather/forecast.json") {
+        if let json = getJSON("file:///Users/iMac/Desktop/Simple-Weather/forecast.json") {
             let asDictionary = parseJSON(json)
             weatherDescription = getWeatherDescription(asDictionary)
             hourlyWeatherData = getHourlyWeatherData(asDictionary)
