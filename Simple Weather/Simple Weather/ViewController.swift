@@ -29,11 +29,18 @@ class ViewController: UIViewController {
     @IBOutlet weak var fourthTempLabel: UILabel!
     @IBOutlet weak var fifthTempLabel: UILabel!
     
+    @IBOutlet weak var firstHeight: NSLayoutConstraint!
+    @IBOutlet weak var secondHeight: NSLayoutConstraint!
+    @IBOutlet weak var thirdhHeight: NSLayoutConstraint!
+    @IBOutlet weak var fourthHeight: NSLayoutConstraint!
+    @IBOutlet weak var fifthHeight: NSLayoutConstraint!
+    
     override func viewDidLoad() {
 
         let times = [firstTimeLabel, secondTimeLabel, thirdTimeLabel, fourthTimeLabel, fifthTimeLabel]
         var images = [firstImageLabel, secondImageLabel, thirdImageLabel, fourthImageLabel, fifthImageLabel]
         let temps = [firstTempLabel, secondTempLabel, thirdTempLabel, fourthTempLabel, fifthTempLabel]
+        let constraints = [firstHeight, secondHeight, thirdhHeight, fourthHeight, fifthHeight]
         
         super.viewDidLoad()
         
@@ -49,6 +56,7 @@ class ViewController: UIViewController {
                 times[i].text = getPrintDate(data[i].time)
                 images[i].image = UIImage(named: forecast.icon)
                 temps[i].text = String(format: "%.1f", forecast.temperature) + " °C"
+                constraints[i].constant = CGFloat(200 * forecast.precipation)
                 i += 1
             }
         }
