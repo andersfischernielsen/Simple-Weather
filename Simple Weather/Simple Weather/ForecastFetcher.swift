@@ -63,7 +63,7 @@ class ForecastFetcher: NSObject {
             let icon = forecast["icon"] as! String
             let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
             let temperature = forecast["temperature"] as! Double
-            let precipation = forecast["precipation"] as? Double
+            let precipation = forecast["precipIntensity"] as? Double
             
             return HourWeatherData(icon: icon, time: time, temperature: temperature, precipation: precipation)
         }
