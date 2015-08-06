@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var forecastSummary: UILabel!
     
     @IBOutlet weak var firstTimeLabel: UILabel!
@@ -35,38 +36,47 @@ class ViewController: UIViewController {
     @IBOutlet weak var fourthHeight: NSLayoutConstraint!
     @IBOutlet weak var fifthHeight: NSLayoutConstraint!
     
+    var locationManager: CLLocationManager?
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
+        setupLocationManager()
+    }
+    
+    private func setupLocationManager() {
+        locationManager = CLLocationManager()
+        locationManager!.delegate = self
+        locationManager!.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager!.requestWhenInUseAuthorization()
+        locationManager!.startUpdatingLocation()
+    }
 
+    private func setViewDataFromCoordinates(lat: Double, lon: Double) {
         let times = [firstTimeLabel, secondTimeLabel, thirdTimeLabel, fourthTimeLabel, fifthTimeLabel]
         var images = [firstImageLabel, secondImageLabel, thirdImageLabel, fourthImageLabel, fifthImageLabel]
         let temps = [firstTempLabel, secondTempLabel, thirdTempLabel, fourthTempLabel, fifthTempLabel]
         let constraints = [firstHeight, secondHeight, thirdhHeight, fourthHeight, fifthHeight]
         
-        super.viewDidLoad()
-        
         let fetcher = ForecastFetcher()
         
-        if let description = fetcher.weatherDescription {
-            forecastSummary.text = fetcher.weatherDescription
+            if let weatherData = fetcher.fetchForCoordinatesWithLatitude(lat, longitude: lon) {
+                let summary = weatherData.0
+                let data = weatherData.1 as [HourWeatherData]!
+                
+                forecastSummary.text = summary
+                
+                var i = 0
+                for forecast in data {
+                    times[i].text = getPrintDate(data[i].time)
+                    images[i].image = UIImage(named: forecast.icon)
+                    temps[i].text = String(format: "%.1f", forecast.temperature) + " °C"
+                    constraints[i].constant = CGFloat(200 * forecast.precipation)
+                    i += 1
+                }
         }
-        
-        if let data = fetcher.hourlyWeatherData {
-            var i = 0
-            for forecast in data {
-                times[i].text = getPrintDate(data[i].time)
-                images[i].image = UIImage(named: forecast.icon)
-                temps[i].text = String(format: "%.1f", forecast.temperature) + " °C"
-                constraints[i].constant = CGFloat(200 * forecast.precipation)
-                i += 1
-            }
-        }
-        
-        
-        
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
-    func getPrintDate(date: NSDate) -> String {
+    private func getPrintDate(date: NSDate) -> String {
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "HH:mm"
         let calendar = NSCalendar.currentCalendar()
@@ -83,15 +93,12 @@ class ViewController: UIViewController {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+            var locationArray = locations as NSArray
+            var locationObj = locationArray.lastObject as! CLLocation
+            var coord = locationObj.coordinate
+        
+            setViewDataFromCoordinates(coord.latitude as Double, lon: coord.longitude as Double)
+        }
 }
 
