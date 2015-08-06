@@ -9,13 +9,7 @@
 import UIKit
 
 class ForecastFetcher: NSObject {
-    var data : NSArray? = []
-    var weatherDescription: String? = String()
-    var hourlyWeatherData: [HourWeatherData]? = []
     
-    override init() {
-        super.init()
-        
         let timestamp = Int(NSDate().timeIntervalSince1970) - 10800
         if let json = getJSON("https://api.forecast.io/forecast/c8b21df3eeb39178cc1d49d6f760f251/55.462597,10.219524,\(timestamp)?units=si") {
             let asDictionary = parseJSON(json)
