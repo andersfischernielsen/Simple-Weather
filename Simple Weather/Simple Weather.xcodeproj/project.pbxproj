@@ -105,11 +105,11 @@
 			children = (
 				88082CCE1B5FC744006B89E3 /* AppDelegate.swift */,
 				88082CD01B5FC744006B89E3 /* ViewController.swift */,
+				88082CEE1B5FCB5E006B89E3 /* ForecastFetcher.swift */,
 				88082CD21B5FC744006B89E3 /* Main.storyboard */,
 				88082CD51B5FC744006B89E3 /* Images.xcassets */,
 				88082CD71B5FC744006B89E3 /* LaunchScreen.xib */,
 				88082CCC1B5FC744006B89E3 /* Supporting Files */,
-				88082CEE1B5FCB5E006B89E3 /* ForecastFetcher.swift */,
 			);
 			path = "Simple Weather";
 			sourceTree = "<group>";
