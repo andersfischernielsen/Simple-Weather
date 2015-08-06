@@ -47,7 +47,7 @@ class ForecastFetcher: NSObject {
         var asHourData: [HourWeatherData] = []
         
         for forecast in data {
-            if let parsed = parseToHourWeatherData(forecast) {
+            if let parsed = sortByHourAndConvertToWeatherData(forecast) {
                 asHourData.append(parsed)
             }
         }
@@ -55,7 +55,7 @@ class ForecastFetcher: NSObject {
         return asHourData
     }
     
-    func parseToHourWeatherData(forecast: AnyObject) -> HourWeatherData? {
+    func sortByHourAndConvertToWeatherData(forecast: AnyObject) -> HourWeatherData? {
         let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
         let interval = time.timeIntervalSinceNow
         
