@@ -18,24 +18,24 @@ class ForecastFetcher: NSObject {
         }
     }
     
-    func getJSON(urlToRequest: String) -> NSData? {
+    private func getJSON(urlToRequest: String) -> NSData? {
         return NSData(contentsOfURL: NSURL(string: urlToRequest)!)
     }
     
-    func parseJSON(inputData: NSData) -> Dictionary<String, AnyObject> {
+    private func parseJSON(inputData: NSData) -> Dictionary<String, AnyObject> {
         var error: NSError?
         let weatherData = NSJSONSerialization.JSONObjectWithData(inputData, options: NSJSONReadingOptions.MutableContainers, error: &error) as! NSDictionary
         
         return weatherData as! Dictionary<String, AnyObject>
     }
     
-    func getWeatherDescription(data: Dictionary<String, AnyObject>) -> String {
+    private func getWeatherDescription(data: Dictionary<String, AnyObject>) -> String {
         let hourly = data["hourly"] as! Dictionary<String, AnyObject>
         let description = hourly["summary"] as! String
         return "\(description)"
     }
     
-    func getHourlyWeatherData(data: Dictionary<String, AnyObject>) -> [HourWeatherData] {
+    private func getHourlyWeatherData(data: Dictionary<String, AnyObject>) -> [HourWeatherData] {
         let hourly = data["hourly"] as! Dictionary<String, AnyObject>
         let data = hourly["data"] as! [AnyObject]
         var asHourData: [HourWeatherData] = []
@@ -49,7 +49,7 @@ class ForecastFetcher: NSObject {
         return asHourData
     }
     
-    func sortByHourAndConvertToWeatherData(forecast: AnyObject) -> HourWeatherData? {
+    private func sortByHourAndConvertToWeatherData(forecast: AnyObject) -> HourWeatherData? {
         let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
         let interval = time.timeIntervalSinceNow
         
