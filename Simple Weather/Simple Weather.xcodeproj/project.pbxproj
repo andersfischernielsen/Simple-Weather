@@ -26,6 +26,7 @@
 		88C90D291B6291BC00930DE5 /* sleet.png in Resources */ = {isa = PBXBuildFile; fileRef = 88C90D1F1B6291BC00930DE5 /* sleet.png */; };
 		88C90D2A1B6291BC00930DE5 /* snow.png in Resources */ = {isa = PBXBuildFile; fileRef = 88C90D201B6291BC00930DE5 /* snow.png */; };
 		88C90D2B1B6291BC00930DE5 /* wind.png in Resources */ = {isa = PBXBuildFile; fileRef = 88C90D211B6291BC00930DE5 /* wind.png */; };
+		9A39F4AC1B74BDA80003E436 /* WeatherTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A39F4AB1B74BDA80003E436 /* WeatherTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		88C90D1F1B6291BC00930DE5 /* sleet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sleet.png; sourceTree = "<group>"; };
 		88C90D201B6291BC00930DE5 /* snow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snow.png; sourceTree = "<group>"; };
 		88C90D211B6291BC00930DE5 /* wind.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wind.png; sourceTree = "<group>"; };
+		9A39F4AB1B74BDA80003E436 /* WeatherTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeatherTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 			children = (
 				88082CCE1B5FC744006B89E3 /* AppDelegate.swift */,
 				88082CD01B5FC744006B89E3 /* ViewController.swift */,
+				9A39F4AB1B74BDA80003E436 /* WeatherTableViewController.swift */,
 				88082CEE1B5FCB5E006B89E3 /* ForecastFetcher.swift */,
 				88082CD21B5FC744006B89E3 /* Main.storyboard */,
 				88082CD51B5FC744006B89E3 /* Images.xcassets */,
@@ -263,6 +266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9A39F4AC1B74BDA80003E436 /* WeatherTableViewController.swift in Sources */,
 				88082CD11B5FC744006B89E3 /* ViewController.swift in Sources */,
 				88082CCF1B5FC744006B89E3 /* AppDelegate.swift in Sources */,
 				88082CEF1B5FCB5E006B89E3 /* ForecastFetcher.swift in Sources */,
