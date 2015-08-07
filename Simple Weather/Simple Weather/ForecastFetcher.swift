@@ -10,7 +10,7 @@ import UIKit
 
 class ForecastFetcher: NSObject {
     
-    func fetchForCoordinatesWithLatitude(latitude: Double, longitude: Double) -> (String?, [HourWeatherData])? {
+    func fetchForCoordinatesWithLatitude(latitude: Double, longitude: Double) -> (String, [HourWeatherData])? {
         let timestamp = Int(NSDate().timeIntervalSince1970) - 10800
         
         if let json = getJSON("https://api.forecast.io/forecast/c8b21df3eeb39178cc1d49d6f760f251/\(latitude),\(longitude),\(timestamp)?units=si") {
@@ -61,17 +61,17 @@ class ForecastFetcher: NSObject {
         let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
         let interval = time.timeIntervalSinceNow
         
-        if interval <= 7200 && interval >= 0 || interval >= -7200 && interval <= 0 {
+        //if interval <= 7200 && interval >= 0 || interval >= -7200 && interval <= 0 {
             let icon = forecast["icon"] as! String
-            let time = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
+            let forecastTime = NSDate(timeIntervalSince1970: NSTimeInterval(forecast["time"] as! Int))
             let temperature = forecast["temperature"] as! Double
             let precipation = forecast["precipIntensity"] as? Double
             
-            return HourWeatherData(icon: icon, time: time, temperature: temperature, precipation: precipation)
-        }
-        else {
-            return nil
-        }
+            return HourWeatherData(icon: icon, time: forecastTime, temperature: temperature, precipation: precipation)
+        //}
+        //else {
+        //    return nil
+        //}
     }
 }
 
