@@ -37,6 +37,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var fifthHeight: NSLayoutConstraint!
     
     var locationManager: CLLocationManager?
+    var oldCoords: (Double, Double) = (0.0, 0.0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,11 +95,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-            var locationArray = locations as NSArray
-            var locationObj = locationArray.lastObject as! CLLocation
-            var coord = locationObj.coordinate
+        var locationObj = (locations as NSArray).lastObject as! CLLocation
+        var coord = locationObj.coordinate
         
+        let lat = coord.latitude as Double
+        let lon = coord.longitude as Double
+        
+        if (lat != oldCoords.0 && lon != oldCoords.1) {
             setViewDataFromCoordinates(coord.latitude as Double, lon: coord.longitude as Double)
+            oldCoords = (lat, lon)
         }
+    }
 }
 
