@@ -12,30 +12,6 @@ import CoreLocation
 class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var forecastSummary: UILabel!
     
-    @IBOutlet weak var firstTimeLabel: UILabel!
-    @IBOutlet weak var secondTimeLabel: UILabel!
-    @IBOutlet weak var thirdTimeLabel: UILabel!
-    @IBOutlet weak var fourthTimeLabel: UILabel!
-    @IBOutlet weak var fifthTimeLabel: UILabel!
-    
-    @IBOutlet weak var firstImageLabel: UIImageView!
-    @IBOutlet weak var secondImageLabel: UIImageView!
-    @IBOutlet weak var thirdImageLabel: UIImageView!
-    @IBOutlet weak var fourthImageLabel: UIImageView!
-    @IBOutlet weak var fifthImageLabel: UIImageView!
-    
-    @IBOutlet weak var firstTempLabel: UILabel!
-    @IBOutlet weak var secondTempLabel: UILabel!
-    @IBOutlet weak var thirdTempLabel: UILabel!
-    @IBOutlet weak var fourthTempLabel: UILabel!
-    @IBOutlet weak var fifthTempLabel: UILabel!
-    
-    @IBOutlet weak var firstHeight: NSLayoutConstraint!
-    @IBOutlet weak var secondHeight: NSLayoutConstraint!
-    @IBOutlet weak var thirdhHeight: NSLayoutConstraint!
-    @IBOutlet weak var fourthHeight: NSLayoutConstraint!
-    @IBOutlet weak var fifthHeight: NSLayoutConstraint!
-    
     var locationManager: CLLocationManager?
     var oldCoords: (Double, Double) = (0.0, 0.0)
     
@@ -53,47 +29,24 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
 
     private func setViewDataFromCoordinates(lat: Double, lon: Double) {
-        let times = [firstTimeLabel, secondTimeLabel, thirdTimeLabel, fourthTimeLabel, fifthTimeLabel]
-        var images = [firstImageLabel, secondImageLabel, thirdImageLabel, fourthImageLabel, fifthImageLabel]
-        let temps = [firstTempLabel, secondTempLabel, thirdTempLabel, fourthTempLabel, fifthTempLabel]
-        let constraints = [firstHeight, secondHeight, thirdhHeight, fourthHeight, fifthHeight]
-        
-        let fetcher = ForecastFetcher()
-        
-            if let weatherData = fetcher.fetchForCoordinatesWithLatitude(lat, longitude: lon) {
-                let summary = weatherData.0
-                let data = weatherData.1 as [HourWeatherData]!
+        for child in self.childViewControllers {
+            if child.isKindOfClass(WeatherTableViewController) {
+                let controller = child as! WeatherTableViewController
                 
-                forecastSummary.text = summary
-                
-                var i = 0
-                for forecast in data {
-                    times[i].text = getPrintDate(data[i].time)
-                    images[i].image = UIImage(named: forecast.icon)
-                    temps[i].text = String(format: "%.1f", forecast.temperature) + " °C"
-                    constraints[i].constant = CGFloat(200 * forecast.precipation)
-                    i += 1
+                if let (summary, data) = self.fetchForecastData(lat, lon: lon) {
+                    forecastSummary.text = summary
+                    controller.setTableViewData(data)
                 }
+            }
+            
         }
     }
     
-    private func getPrintDate(date: NSDate) -> String {
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        let calendar = NSCalendar.currentCalendar()
-        let comp = calendar.components((.CalendarUnitHour | .CalendarUnitMinute), fromDate: date)
-        let hour = comp.hour
-        let minute = comp.minute
-        
-        if minute == 0 {
-            return "\(hour):\(minute)\(minute)"
-        }
-        else {
-            return "\(hour):\(minute)"
-        }
-        
+    private func fetchForecastData(lat: Double, lon: Double) -> (String, [HourWeatherData])? {
+        let fetcher = ForecastFetcher()
+        return fetcher.fetchForCoordinatesWithLatitude(lat, longitude: lon)
     }
-    
+
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         var locationObj = (locations as NSArray).lastObject as! CLLocation
         var coord = locationObj.coordinate
